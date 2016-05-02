@@ -13,8 +13,8 @@ function generateUUID(){
 	return uuid;
 };
 
-app.listen(3000,function(){
-console.log("It's Started on PORT 3000");
+app.listen(1337,function(){
+console.log("It's Started on PORT 1337");
 });
 app.use(bodyParser.json());
 
@@ -124,3 +124,4 @@ app.post('/login', function(req, res){
     console.log(err);
   });
   res.json({Success:false});
+});
