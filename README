@@ -1,0 +1,32 @@
+Service Params
+CreateUser: IN ExternalId: string
+Name: string
+Password: string
+Gender: string
+Images: IN[{internal_id,
+base64_image}]
+FacilitatorIds : [{FacType,
+FacId}]
+UserId: string
+Images: OUT [{ internal_id: string,
+isSuccess: bool,
+appCode: int,
+message: string}]
+Success: bool
+Login: IN ExternalId (client): string
+Password: string
+Image: { base64_image,
+internal_id}
+Login: OUT UserId (internal): string
+IsSamePerson: bool
+CodeError: [{code:integer, message:string}]
+Success: bool
+CREATE USER:
+SERVER/createUser (ExternalId, Name, Password, Gender, Images[])
+DATABASE/checkExternalId (ExternalId)
+FACILITATOR/train (UserId, Images[], FaciliatatorIds[])
+DATABASE/createUser(ExternalId, UserId, Name, Password, Gender, Images[], FacilitatorIds[])
+LOGIN:
+SERVER/login (ExternalId, Password, Image)
+DATABASE/login (ExternalId, Password)
+FACILITATOR/verify (UserID, Image, FaciliatorIds[])
