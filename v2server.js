@@ -3,9 +3,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var portNum = 1338;
-var databaseURL = "";
+var databaseURL = "http://ix.cs.uoregon.edu";
 var databasePort = 8080;
-var facilitatorURL = "";
+var facilitatorURL = "http://ix-dev.cs.uoregon.edu";
 var facilitatorPort = 8999;
 //Not needed anymore since database creates this
 /*
