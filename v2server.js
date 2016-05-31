@@ -157,7 +157,7 @@ app.post('/login', function(req, res){
 		}
   })
   .catch(function(err){
-    console.log(err);
+    console.log(err.response.body);
 		err.success=false;
 		res.json(err.response.body);
   });
