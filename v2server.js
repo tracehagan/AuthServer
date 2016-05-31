@@ -8,31 +8,72 @@ var databasePort = 8080;
 var facilitatorURL = "http://ix-dev.cs.uoregon.edu";
 var facilitatorPort = 8999;
 //Not needed anymore since database creates this
-/*
-function generateUUID(){
-	var d = Date.now();
-	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		var r = (d + Math.random()*16)%16 | 0;
-		d = Math.floor(d/16);
-		return (c=='x' ? r : (r&0x7|0x8)).toString(16);
-	});
-	return uuid;
-};
-*/
 app.listen(portNum,function(){
 console.log("It's Started on PORT " + portNum);
 });
 app.use(bodyParser.json());
 
-/*
-*  Creates a user. Call path is:
-*  I receieved call, make call to facilitator,
-*  then I make call to db to save
-*  then I return the uuid
-*/
-app.post('/register',function(req,res){
+app.post('/train', function(req, res){
   var bod = req.body;
   var options = {
+    uri: databaseURL + ':' +  databasePort + '/login',
+    method: 'POST',
+    body:bod,
+    json: true
+  };
+  rp(options)
+  .then(function(parsedBody){
+    console.log(parsedBody);
+    if(parsedBody.success == true){
+			parsedBody.pictures = bod.pictures;
+	    var options2 = {
+	      uri: facilitatorURL + ':' + facilitatorPort + '/train',
+	      method: 'POST',
+	      body: parsedBody,
+	      json: true
+	    };
+	    rp(options2)
+	    .then(function(parsedBody2){
+	      console.log(parsedBody2);
+	      if(parsedBody2.success==true){
+					var options3 = {
+				    uri: databaseURL + ':' +  databasePort + '/train',
+				    method: 'POST',
+				    body:parsedBody2,
+				    json: true
+				  };
+				  rp(options3)
+				  .then(function(parsedBody3){
+						if(parsedBody3.success==true){
+							res.json({success: true});
+						}
+					}.catch(function(err3){
+						console.log(err3);
+						err3.success=false;
+						res.json(err3);
+					})
+	      }else{
+					res.json(parsedBody2);
+				}
+	    })
+	    .catch(function(err2){
+	      console.log(err2);
+				err2.success=false;
+				res.json(err2);
+	    });
+		}
+  })
+  .catch(function(err){
+    console.log(err);
+		err.success=false;
+		res.json(err);
+  });
+  res.json({success:false});
+});
+
+app.post('/register',function(req,res){
+  var bod = req.body;
+  /*var options = {
     uri: facilitatorURL + ':' + facilitatorPort + '/register',
     method: 'POST',
     body:bod,
@@ -40,16 +81,16 @@ app.post('/register',function(req,res){
   };
   rp(options)
   /* Get facilitator response */
-  .then(function(parsedBody){
+  /*.then(function(parsedBody){
     console.log(parsedBody);
 		//parsedBody should have FacilitatorIDs
     //bod.FacilitatorIDs = [];
     if(parsedBody.success==true){
-			parsedBody.pictures = bod.pictures;
+			parsedBody.pictures = bod.pictures;*/
       var options2 = {
         uri: databaseURL + ':' +  databasePort + '/register',
         method: 'POST',
-        body: parsedBody,
+        body: bod,
         json: true
       };
       /* Train the user into the database */
@@ -67,14 +108,14 @@ app.post('/register',function(req,res){
 				err2.success=false;
 				res.json(err2);
       });
-    }
-  })
-  .catch(function(err){
+    //}
+  //})
+  /*.catch(function(err){
     //console.log(parsedBody);
     console.log(err);
 		err.success=false;
 		res.json(err);
-  });
+  });*/
 	res.json({success: false});
 });
 
