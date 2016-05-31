@@ -48,7 +48,8 @@ app.post('/train', function(req, res){
 						if(parsedBody3.success==true){
 							res.json({success: true});
 						}
-					}.catch(function(err3){
+					})
+					.catch(function(err3){
 						console.log(err3.response.body);
 						err3.success=false;
 						res.json(err3.response.body);
