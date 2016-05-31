@@ -8,10 +8,11 @@ var databasePort = 8080;
 var facilitatorURL = "http://ix-dev.cs.uoregon.edu";
 var facilitatorPort = 8999;
 //Not needed anymore since database creates this
+app.use(bodyParser.json({limit: '50mb'}));
 app.listen(portNum,function(){
 console.log("It's Started on PORT " + portNum);
 });
-app.use(bodyParser.json());
+
 
 app.post('/train', function(req, res){
   var bod = req.body;
@@ -48,27 +49,27 @@ app.post('/train', function(req, res){
 							res.json({success: true});
 						}
 					}.catch(function(err3){
-						console.log(err3);
+						console.log(err3.response.body);
 						err3.success=false;
-						res.json(err3);
+						res.json(err3.response.body);
 					})
 	      }else{
 					res.json(parsedBody2);
 				}
 	    })
 	    .catch(function(err2){
-	      console.log(err2);
+	      console.log(err2.response.body);
 				err2.success=false;
-				res.json(err2);
+				res.json(err2.response.body);
 	    });
 		}
   })
   .catch(function(err){
-    console.log(err);
+    console.log(err.response.body);
 		err.success=false;
-		res.json(err);
+		res.json(err.response.body);
   });
-  res.json({success:false});
+  //res.json({success:false});
 });
 
 app.post('/register',function(req,res){
@@ -104,9 +105,9 @@ app.post('/register',function(req,res){
         }
       })
       .catch(function(err2){
-        console.log(err2);
+        console.log(err2.response.body);
 				err2.success=false;
-				res.json(err2);
+				res.json(err2.response.body);
       });
     //}
   //})
@@ -116,7 +117,7 @@ app.post('/register',function(req,res){
 		err.success=false;
 		res.json(err);
   });*/
-	res.json({success: false});
+	//res.json({success: false});
 });
 
 app.post('/login', function(req, res){
@@ -148,16 +149,16 @@ app.post('/login', function(req, res){
 				}
 	    })
 	    .catch(function(err2){
-	      console.log(err2);
+	      console.log(err2.response.body);
 				err2.success=false;
-				res.json(err2);
+				res.json(err2.response.body);
 	    });
 		}
   })
   .catch(function(err){
     console.log(err);
 		err.success=false;
-		res.json(err);
+		res.json(err.response.body);
   });
-  res.json({success:false});
+  //res.json({success:false});
 });
